@@ -2,6 +2,7 @@ package App;
 
 import java.io.IOException;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
@@ -60,7 +61,6 @@ public class Server {
     public void stopServer() throws Exception {
 
         clientHandler.interrupt();
-
         clients.clear();
 
         if (!serverSocket.isClosed())
@@ -68,6 +68,7 @@ public class Server {
     }
 
     public void deliverChat(String s) throws IOException {
+        System.out.println("send to: " + clients.size());
         for (Client client : clients) {
             clientHandler.sendChat(s, client);
         }
@@ -78,13 +79,32 @@ public class Server {
     }
 
     public void addClient(Client client) {
+        System.out.println("before add: " + clients.size());
+
         clients.add(client);
+        System.out.println("after add: " + clients.size());
+
     }
 
-    // TODO: Remove
-    // public void removeClient(Client client) throws Exception {
-    // clients.remove(client);
-    // }
+    public void removeClient(InetAddress IP, int port) throws Exception {
+        System.out.println("before remove: " + clients.size());
+        for (Client client : clients) {
+            System.out.println(client.getIPAddress());
+            System.out.println(client.getPort());
+
+            // if (client.getIPAddress() == IP && client.getPort() == port) {
+            // clients.remove(client);
+            // break;
+            // }
+
+            if (client.getPort() == port) {
+                clients.remove(client);
+                break;
+            }
+        }
+        System.out.println("after remove: " + clients.size());
+
+    }
 
     public void log(String s) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

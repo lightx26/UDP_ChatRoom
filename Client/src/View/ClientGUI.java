@@ -166,7 +166,8 @@ public class ClientGUI extends JFrame {
                         client.setServerPort(Integer.parseInt(portField.getText()));
                         client.setUsername(usernameField.getText());
 
-                        resultArea.append("Connect to server successfully. Start chat now.\n");
+                        client.startChat();
+
                         client.send("1 " + client.getUsername());
 
                         _isConnected = true;
@@ -196,18 +197,19 @@ public class ClientGUI extends JFrame {
 
         });
 
-        // leaveButton.addActionListener(new ActionListener() {
-        // @Override
-        // public void actionPerformed(ActionEvent e) {
-        // client.send("00 " + client.getUsername());
-        // // try {
-        // // client.socket.shutdownOutput();
-        // // } catch (IOException e1) {
-        // // System.err.println("Cannot shutdown output.");
-        // // e1.printStackTrace();
-        // // }
-        // }
-        // });
+        leaveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                client.send("0 " + client.getUsername());
+                settingNotConnected();
+                // try {
+                // client.socket.shutdownOutput();
+                // } catch (IOException e1) {
+                // System.err.println("Cannot shutdown output.");
+                // e1.printStackTrace();
+                // }
+            }
+        });
 
         sendButton.addActionListener(new ActionListener() {
             @Override
@@ -268,7 +270,7 @@ public class ClientGUI extends JFrame {
 
                 else if (code.equals("1")) {
                     if (payload.equals(client.getUsername() + " enter the conversation.")) {
-
+                        resultArea.append("Welcome " + client.getUsername() + "\nStart chat now.\n");
                     } else {
                         resultArea.append(payload + "\n");
                     }

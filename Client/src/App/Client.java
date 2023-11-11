@@ -23,7 +23,7 @@ public class Client {
             // TODO: handle exception
             e.printStackTrace();
         }
-        serverPort = 2626;
+        // serverPort = 2626;
     }
 
     public void setServerPort(int port) {
@@ -50,9 +50,9 @@ public class Client {
         return dataTransfer.receive();
     }
 
-    void start() {
+    public void startChat() {
         dataTransfer = new DataTransfer(socket, serverIP, serverPort);
-        new ClientGUI(this);
+        // new ClientGUI(this);
         // clientGUI = new ClientGUI(this);
     }
 
@@ -63,9 +63,12 @@ public class Client {
     public void stop() {
         _isConnected = false;
         dataTransfer.close();
+        dataTransfer = null;
     }
 
     public static void main(String[] args) throws Exception {
-        new Client().start();
+        Client client = new Client();
+        new ClientGUI(client);
+        // new Client().start();
     }
 }

@@ -103,7 +103,7 @@ public class ServerGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    server.deliverChat("10 Server is stopped.");
+                    server.deliverChat("3 Server is stopped.");
                     server.stopServer();
                 } catch (Exception e1) {
                     server.log("Cannot stop server: " + e1.getMessage() + "\n");

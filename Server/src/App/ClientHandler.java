@@ -40,32 +40,31 @@ public class ClientHandler extends Thread {
                 s = receiveChat();
             } catch (IOException e) {
                 // TODO: catch exception
-                e.printStackTrace();
-                // try {
-                // // server.terminate(this);
-                // // clientSocket.close();
-                // this.interrupt();
-                // } catch (Exception e1) {
-                // e1.printStackTrace();
-                // } finally {
-                // return;
-                // }
+                // e.printStackTrace();
+                System.err.println("Cannot receive: " + e.getMessage());
+                return;
             }
 
             String code = getMessageCode(s);
 
             if (code.equals("0")) {
-                // TODO: Handle leave message
+                try {
+                    server.removeClient(_ClientIPAddress, _ClientPort);
+                    server.deliverChat("2 " + getMessagePayload(s) + " leave the conversation.");
+                    server.log(getMessagePayload(s) + " leave the conversation.");
+                } catch (Exception e) {
+                    // TODO: handle exception
+                }
 
             } else if (code.equals("1")) {
                 try {
-                    server.deliverChat("1 " + getMessagePayload(s) + " enter the conversation.");
                     server.addClient(new Client(_ClientIPAddress, _ClientPort));
+                    server.deliverChat("1 " + getMessagePayload(s) + " enter the conversation.");
                     server.log(getMessagePayload(s) + " enter the conversation.");
                 } catch (IOException e) {
                     System.out.println("Cannot send confirmation.");
                 }
-            } else {
+            } else if (code.equals("2")) {
                 try {
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                     server.deliverChat(
@@ -73,7 +72,7 @@ public class ClientHandler extends Thread {
                                     getMessagePayload(s));
                 } catch (IOException e) {
                     System.out.println("Cannot send data.");
-                    break;
+                    return;
                 }
             }
         }
