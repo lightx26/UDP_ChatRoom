@@ -68,7 +68,6 @@ public class Server {
     }
 
     public void deliverChat(String s) throws IOException {
-        System.out.println("send to: " + clients.size());
         for (Client client : clients) {
             clientHandler.sendChat(s, client);
         }
@@ -79,19 +78,12 @@ public class Server {
     }
 
     public void addClient(Client client) {
-        System.out.println("before add: " + clients.size());
-
         clients.add(client);
-        System.out.println("after add: " + clients.size());
 
     }
 
     public void removeClient(InetAddress IP, int port) throws Exception {
-        System.out.println("before remove: " + clients.size());
         for (Client client : clients) {
-            System.out.println(client.getIPAddress());
-            System.out.println(client.getPort());
-
             // if (client.getIPAddress() == IP && client.getPort() == port) {
             // clients.remove(client);
             // break;
@@ -102,7 +94,6 @@ public class Server {
                 break;
             }
         }
-        System.out.println("after remove: " + clients.size());
 
     }
 
